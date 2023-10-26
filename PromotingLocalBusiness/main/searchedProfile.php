@@ -71,7 +71,6 @@
         <div>
             <h2><?= $userData["username"] ?></h2>
             <h4><?= $userData["first_name"] . " " . $userData["last_name"] ?></h4>
-            <button>Follow</button>
         </div>
         <div>
             <h3>Followers: <?= $userData["followers"]; ?></h3>
