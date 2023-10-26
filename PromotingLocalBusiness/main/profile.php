@@ -38,7 +38,7 @@
 </head>
 <body>
     <?php
-        session_start();
+        include "../includes/sessions.php";
         $user = [
             "username" => isset($_SESSION["username"]) ? $_SESSION["username"] : htmlspecialchars($_POST["username"]),
             "password" => isset($_SESSION["pw"]) ? $_SESSION["pw"] : htmlspecialchars($_POST["pw"]),
@@ -72,6 +72,10 @@
 
         if (!$userFound) {
             header("Location: login.php", TRUE, 307);
+        } if (isset($_GET["logout"])) {
+            logout();
+            header("Location: login.php");
+            die();
         }
 
 
@@ -112,6 +116,11 @@
         <div>
             <h3>Following: <?= $user["following"]; ?></h3>
         </div>
+        <div>
+            <form action="" method="get">
+                <input type="submit" name="logout" value="Log Out">
+            </form>
+        </div>
     </div>
 
     <div id="posts">
@@ -123,6 +132,7 @@
                 echo "<img class='post-img' src='" . $v["image"] . "'>";
             }
         ?>
+    </div>
 </body>
 </html>
 

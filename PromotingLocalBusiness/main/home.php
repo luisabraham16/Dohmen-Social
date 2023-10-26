@@ -14,7 +14,6 @@ WHERE follower='" . $user["username"] . "' OR posts.username='" . $user["usernam
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link href='styles.css' rel='stylesheet'>
     <style>
         #posts {
             display: flex;
@@ -92,7 +91,7 @@ WHERE follower='" . $user["username"] . "' OR posts.username='" . $user["usernam
                     $field5name = $row["image"];
                     $field6name = $row["profile_image"];
                     //then we can display those vars below however we want
-                    echo '<div class="post"><div id="user-post-data"><img src="'. $field6name .'" id="profile-image"><h2>' . $field2name . '</h2></div>';
+                    echo '<div class="post"><div id="user-post-data" onclick="checkProfile(this)"><img src="'. $field6name .'" id="profile-image"><h2 class="post-user">' . $field2name . '</h2></div>';
                     if($field5name != null)
                     {
                         echo '<div class="image-container"><img src="' . $field5name . '"></div>';
@@ -105,5 +104,20 @@ WHERE follower='" . $user["username"] . "' OR posts.username='" . $user["usernam
             }
         ?>
     </div>
+    <script src="../includes/jquery-3.7.1.min.js"></script>
+    <script>
+        function checkProfile (e) {
+            let listChildren = [ ...e.children ];
+
+            listChildren.forEach(i => {
+                if (i.className = "post-user" && i.innerText != "") {
+                    let myForm = "<form action='searchedProfile.php' method='post' name='tempForm'><input type='text' name='searched-user' value='" + i.innerText + "' ></form>";
+                    $("body").append(myForm);
+
+                    document.forms["tempForm"].submit();
+                }
+            });
+        }
+    </script>
 </body>
 </html>
