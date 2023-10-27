@@ -6,8 +6,8 @@
     $charset = "utf8mb4";
 
 
-    $username = "luis.abraham16";
-    $password = "LuisAwesome16";
+    $username = "root123";
+    $password = "root123";
     $options = [
         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
