@@ -78,6 +78,8 @@
             });
         }
 
+        console.log("derrick test");
+
     </script>
 </body>
 </html>
