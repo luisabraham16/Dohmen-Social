@@ -1,5 +1,8 @@
 <?php 
     include "../includes/connection.php";
+    include "../includes/sessions.php";
+    require_login(isset($_SESSION["logged_in"]));
+
     $follower = $_POST["name"];
     $following = $_POST["name2"];
 

@@ -29,7 +29,7 @@
 </head>
 <body>
     <?php
-        session_start();
+        include "../includes/sessions.php";
         include "../includes/setupUserData.php";
         include "../includes/navbar.php";
     ?>

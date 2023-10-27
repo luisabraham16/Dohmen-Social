@@ -1,8 +1,9 @@
 <?php
-session_start();
-include "../includes/setupUserData.php";
+include "../includes/sessions.php";
 include '../includes/connection.php';
+include "../includes/setupUserData.php";
 include '../includes/navbar.php';
+require_login($_SESSION["logged_in"]);
 //query is the sql statement that runs
 $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, users.profile_image, follows.follower FROM posts JOIN users on posts.username=users.username JOIN follows ON posts.username=follows.following
 WHERE follower='" . $user["username"] . "' OR posts.username='" . $user["username"] . "' GROUP BY PostID ORDER BY PostID desc;";
@@ -13,7 +14,7 @@ WHERE follower='" . $user["username"] . "' OR posts.username='" . $user["usernam
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Dohmen's Social</title>
     <style>
         #posts {
             display: flex;

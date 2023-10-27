@@ -40,7 +40,7 @@
     #nav-image {
         height: 3vh;
         border: 2px solid black;
-        border-radius: 3vh;
+        border-radius: 5vh;
     }
 
 </style>

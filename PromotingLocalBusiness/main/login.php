@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Luis's Sign In Page</title>
+    <title>Dohmen's Social</title>
 </head>
 <body>
     <?php
@@ -14,7 +14,7 @@
                 "password" => htmlspecialchars($_POST["pw"])
             ];
 
-
+            include "../includes/sessions.php";
             include "../includes/connection.php";
            
             $getUser = $pdo->prepare("SELECT Password FROM Users WHERE Username='" . $user["username"] . "'");
@@ -26,8 +26,8 @@
                     $temp2 = $pdo->prepare("SELECT first_name, last_name, username FROM Users WHERE UserID='$temp1'");
                     $temp2->execute();
 
-
                     $userFound = true;
+                    login();
             }
            
         }

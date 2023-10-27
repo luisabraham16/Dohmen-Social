@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sign In</title>
+    <title>Dohmen's Social</title>
     <style>
         * {
             margin: 0px;
@@ -39,19 +39,19 @@
 <body>
     <?php
         include "../includes/sessions.php";
+        include "../includes/connection.php";
+
+        //require_login(isset($_SESSION["logged-in"]));
+
         $user = [
             "username" => isset($_SESSION["username"]) ? $_SESSION["username"] : htmlspecialchars($_POST["username"]),
-            "password" => isset($_SESSION["pw"]) ? $_SESSION["pw"] : htmlspecialchars($_POST["pw"]),
+            "password" => isset($_POST["pw"]) ? htmlspecialchars($_POST["pw"]) : "",
             "profile_image" => "",
             "first_name" => "",
             "last_name" => "",
         ];
 
-        include "../includes/connection.php";
-
-
-        //$pdo->exec("UPDATE Users SET UserID='DerrickIsGay' WHERE UserID='DerrickIsAweso'");
-
+        //$pdo->exec("UPDATE Users SET UserID='Derrick' WHERE UserID='DerrickIsAweso'");
 
         $myUserData = null;
         $userFound = false;
@@ -60,7 +60,7 @@
         $getUser->execute();
         $x = $getUser->fetch();
         
-        if (password_verify($user["password"], $x["Password"])) {
+        if (password_verify($user["password"], $x["Password"]) || isset($_SESSION["logged_in"])) {
             $temp1 = $user["username"];
             $temp2 = $pdo->prepare("SELECT first_name, last_name, username, profile_image FROM Users WHERE username='$temp1'");
             $temp2->execute();
@@ -82,11 +82,13 @@
         if ($myUserData) {
             if (isset($_POST["username"]) && isset($_POST["pw"])) {
                 $_SESSION["username"] = htmlspecialchars($_POST["username"]);
-                $_SESSION["pw"] = htmlspecialchars($_POST["pw"]);
+                //$_SESSION["pw"] = htmlspecialchars($_POST["pw"]);
             }
             $user["profile_image"] = $myUserData["profile_image"];
             $user["first_name"] = $myUserData["first_name"];
             $user["last_name"] = $myUserData["last_name"];
+
+            login();
         }
 
         include "../includes/navbar.php";
