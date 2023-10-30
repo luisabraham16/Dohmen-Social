@@ -4,23 +4,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dohmen's Social</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        * {
-            padding: 0px;
-            margin: 0px;
-        }
-        form {
-            padding-top: 10vw;
+        .container {
+            margin-top: 2rem;
         }
         .search-profile-img {
-            height: 3vh;
-            border: 2px solid black;
-            border-radius: 3vh;
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-right: 1rem;
         }
         .searched-data {
             display: flex;
             align-items: center;
-            cursor: pointer;
+            padding: 1rem;
         }
         .searched-data:hover {
             background-color: lightgray;
@@ -34,10 +33,13 @@
         include "../includes/navbar.php";
     ?>
 
-    <form action="" method="get" autocomplete="off">
-        <input type="text" name="search" id="search" onkeyup="searchUsers(this);" placeholder="Search" value="<?= $_GET["search"] ?? ""; ?>">
-    </form>
-    <div id="ajaxdata"></div>
+    <div class="container">
+        <form action="" method="get" autocomplete="off" class="mb-3">
+            <input type="text" name="search" id="search" onkeyup="searchUsers(this);" placeholder="Search" class="form-control" value="<?= $_GET["search"] ?? ""; ?>">
+        </form>
+        <div id="ajaxdata"></div>
+    </div>
+    
     <script src="../includes/jquery-3.7.1.min.js"></script>
     <script>
         function followBtnClick (e) {

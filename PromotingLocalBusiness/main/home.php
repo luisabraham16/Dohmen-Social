@@ -4,108 +4,117 @@ include '../includes/connection.php';
 include "../includes/setupUserData.php";
 include '../includes/navbar.php';
 require_login($_SESSION["logged_in"]);
-//query is the sql statement that runs
-$query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, users.profile_image, follows.follower FROM posts JOIN users on posts.username=users.username JOIN follows ON posts.username=follows.following
-WHERE follower='" . $user["username"] . "' OR posts.username='" . $user["username"] . "' GROUP BY PostID ORDER BY PostID desc;";
-
+// query is the sql statement that runs
+$query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, users.profile_image, follows.follower FROM posts JOIN users on posts.username=users.username JOIN follows ON posts.username=follows.following WHERE follower='" . $user["username"] . "' OR posts.username='" . $user["username"] . "' GROUP BY PostID ORDER BY PostID desc;";
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dohmen's Social</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
-        #posts {
+        .post {
+            margin: 2rem auto;
+            border: 1px solid #ddd;
+            border-radius: 1rem;
+        }
+        .post-header {
             display: flex;
-            flex-direction: column;
             align-items: center;
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid #ddd;
+        }
+        .post-header img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 50%;
+            margin-right: 1rem;
+        }
+        .post-body img {
+            max-width: 100%;
+            height: auto;
+        }
+        .post-footer {
+            padding: 0.5rem 1rem;
+            border-top: 1px solid #ddd;
+        }
+        .heart-icon, .comment-icon {
+            margin-right: 0.5rem;
+            cursor: pointer;
+        }
+        .heart-icon {
+            color: red;
         }
         .post {
-            margin: 1vw;
-        }
-        .image-container {
-            height: 400px;
-            width: 400px;
-            border: 8px solid black;
+            background-color: #fff;
+            border: 1px solid #e6e6e6;
+            border-radius: 5px;
+            margin-bottom: 2rem;
+            padding: 1rem;
         }
 
-        img {
-            object-fit: cover;
-            object-position: center center;
-            width: 100%;
-            height: 100%;
+        .post-user {
+            font-weight: bold;
         }
-        #profile-image {
-            width: 3vw;
-            border: 3px solid black;
-            border-radius: 8vw;
-        }
-        #user-post-data {
+
+        .like-comment-container {
             display: flex;
-            align-items: center;
+            justify-content: space-between;
+            padding: 0.5rem;
         }
 
-        .heart {
-            position: relative;
-            width: 100px;
-            height: 90px;
-            margin-top: 10px;
+        .like-btn, .comment-btn {
+            cursor: pointer;
+            margin-right: 0.5rem;
         }
-
-        .heart::before, .heart::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            width: 52px;
-            height: 80px;
-            border-radius: 50px 50px 0 0;
-            background: red;
-        }
-
-        .heart::before {
-            left: 50px;
-            transform: rotate(-45deg);
-            transform-origin: 0 100%;
-        }
-
-        .heart::after {
-            left: 0;
-            transform: rotate(45deg);
-            transform-origin: 100% 100%;
-        }
-
     </style>
 </head>
 <body>
-    <div id="posts">
-        <?php 
-            echo "<b> <center>Latest posts</center> </b> <br> <br>";
-            //the database you got earlier, run that sql command
-            if ($result = $mysqli->query($query)) {
-                //not exactly sure, but it gets each row of the database and saves them to temp vars
-                while ($row = $result->fetch_assoc()) {
-                    $field1name = $row["PostID"];
-                    $field2name = $row["username"];
-                    $field3name = $row["Text"];
-                    $field4name = $row["Date"];
-                    $field5name = $row["image"];
-                    $field6name = $row["profile_image"];
-                    //then we can display those vars below however we want
-                    echo '<div class="post"><div id="user-post-data" onclick="checkProfile(this)"><img src="'. $field6name .'" id="profile-image"><h2 class="post-user">' . $field2name . '</h2></div>';
-                    if($field5name != null)
-                    {
-                        echo '<div class="image-container"><img src="' . $field5name . '"></div>';
+    <div class="container mt-5" id="posts">
+        <h3 class="mb-4 text-center">Latest posts</h3>
+            <?php
+                if ($result = $mysqli->query($query)) {
+                    while ($row = $result->fetch_assoc()) {
+                        $field1name = $row["PostID"];
+                        $field2name = $row["username"];
+                        $field3name = $row["Text"];
+                        $field4name = $row["Date"];
+                        $field5name = $row["image"];
+                        $field6name = $row["profile_image"];
+                        echo '<div class="post">';
+                        echo '<div class="post-header" onclick="checkProfile(this)"><img src="'. $field6name .'"><span>' . $field2name . '</span></div>';
+                        if ($field5name != null) {
+                            echo '<div class="post-body"><img src="' . $field5name . '"></div>';
+                        }
+                        echo '<div class="post-footer">';
+                        echo '<h5>'.$field3name.'</h5>';
+                        echo '<small>' . $field4name . '</small><br>';
+                        if ($_SESSION["logged_in"]) {
+                            echo '<i class="heart-icon fas fa-heart"></i><i class="comment-icon fas fa-comment"></i>';
+                        }
+                        echo '<div class="like-comment-container">';
+                        echo '<span class="like-btn">❤️ Like</span>';
+                        echo '<span class="comment-btn">💬 Comment</span>';
+                        echo '</div>'; // End of like-comment-container
+                        echo '</div>'; // End of post-footer
+                        echo '</div>'; // End of post
                     }
-                    echo '<br><div><h4>'.$field3name.'</h4><h5>' . $field4name . '</h5><div class="heart"></div></div></div>';
+                    $result->free();
                 }
-            
-            /*freeresultset*/
-            $result->free();
-            }
-        ?>
+            ?>
+        </div>
     </div>
-    <script src="../includes/jquery-3.7.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
     <script>
         function checkProfile (e) {
             let listChildren = [ ...e.children ];
@@ -119,6 +128,24 @@ WHERE follower='" . $user["username"] . "' OR posts.username='" . $user["usernam
                 }
             });
         }
+
+        const loggedIn = <?php echo $_SESSION["logged_in"] ? 'true' : 'false'; ?>;
+
+        $('.like-btn').click(function() {
+            if (!loggedIn) {
+                alert('Please log in to like the post.');
+                return;
+            }
+            // Your AJAX call to handle likes
+        });
+
+        $('.comment-btn').click(function() {
+            if (!loggedIn) {
+                alert('Please log in to comment on the post.');
+                return;
+            }
+            // Your AJAX call to handle comments
+        });
     </script>
 </body>
 </html>
