@@ -60,7 +60,7 @@ WHERE follower='" . $user["username"] . "' OR posts.username='" . $user["usernam
             width: 52px;
             height: 80px;
             border-radius: 50px 50px 0 0;
-            background: red;
+            background: lightgray;
         }
 
         .heart::before {
@@ -97,7 +97,7 @@ WHERE follower='" . $user["username"] . "' OR posts.username='" . $user["usernam
                     {
                         echo '<div class="image-container"><img src="' . $field5name . '"></div>';
                     }
-                    echo '<br><div><h4>'.$field3name.'</h4><h5>' . $field4name . '</h5><div class="heart"></div></div></div>';
+                    echo '<br><div><div class="heart"></div><h4>'.$field3name.'</h4><h5>' . $field4name . '</h5></div></div>';
                 }
             
             /*freeresultset*/
@@ -119,6 +119,28 @@ WHERE follower='" . $user["username"] . "' OR posts.username='" . $user["usernam
                 }
             });
         }
+
+        $(".heart").click(e => {
+            // access post image to identify post
+            let heartParent = e.target.parentNode.parentNode;
+            let postImg;
+
+            [ ...heartParent.children ].forEach(child => {
+                if (child.className === "image-container") {
+                    postImg = child.childNodes[0].src;
+                }
+            })
+
+            // callback function to modify 'like' table
+            $.ajax({
+                type: "POST",
+                data: { postImage: postImg },
+                url: "../src/like.php",
+                success: (returnData, status) => {
+                    
+                }
+            });
+        });
     </script>
 </body>
 </html>
