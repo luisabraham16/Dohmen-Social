@@ -137,7 +137,7 @@ WHERE follower='" . $user["username"] . "' OR posts.username='" . $user["usernam
                 data: { postImage: postImg },
                 url: "../src/like.php",
                 success: (returnData, status) => {
-                    
+                    console.log(returnData);
                 }
             });
         });
