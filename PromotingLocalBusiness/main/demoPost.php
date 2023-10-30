@@ -47,6 +47,9 @@
         $statement->execute();
     }
 ?>
+<?php
+    // ... Your PHP code remains the same
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -73,6 +76,10 @@
         .btnSubmit:hover {
             background-color: #0056b3;
         }
+        .img-preview {
+            max-width: 100%;
+            margin-top: 1rem;
+        }
     </style>
 </head>
 <body>
@@ -86,9 +93,25 @@
                 <label for="image" class="form-label">Image</label>
                 <input type="file" class="form-control" accept="image/*" name="image" id="image">
             </div>
+            <!-- Image preview -->
+            <img id="imgPreview" class="img-preview" src="" alt="Image preview..." style="display:none;">
             <input type="submit" class="btnSubmit" value="Submit">
         </form>
     </div>
+
+    <script>
+        document.getElementById("image").addEventListener("change", function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById("imgPreview").style.display = "block";
+                    document.getElementById("imgPreview").src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
 
     <!-- Bootstrap JS, Popper.js, and jQuery -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
