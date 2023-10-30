@@ -53,26 +53,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dohmen's Social</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        form {
-            padding-top: 10vw;
+        .container {
+            padding-top: 5vw;
+            max-width: 600px;
+        }
+        label, input {
+            margin-bottom: 1rem;
+        }
+        .btnSubmit {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .btnSubmit:hover {
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
-    <form action = "" method="POST" enctype="multipart/form-data" autocomplete="off">
-        <section>
-            <div>
-                <label for='userPost'>Post</label>
-                <input id='userPost' name='userPost' class="postInput" type="text">
+    <div class="container">
+        <form action="" method="POST" enctype="multipart/form-data" autocomplete="off">
+            <div class="mb-3">
+                <label for="userPost" class="form-label">Post</label>
+                <input type="text" class="form-control" id="userPost" name="userPost">
             </div>
-            <div>
-                <label for='image'>Img</label>
-                <input type="file" accept="image/*" name="image" id="image">                
+            <div class="mb-3">
+                <label for="image" class="form-label">Image</label>
+                <input type="file" class="form-control" accept="image/*" name="image" id="image">
             </div>
-        </section>
+            <input type="submit" class="btnSubmit" value="Submit">
+        </form>
+    </div>
 
-        <input class='btnSubmit' type='submit' value='submit'>
-    </form>
+    <!-- Bootstrap JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
 </body>
 </html>
