@@ -75,29 +75,6 @@ $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, us
             cursor: pointer;
             margin-right: 0.5rem;
         }
-
-        .heart::before, .heart::after {
-            content: "";
-            position: absolute;
-            top: 0;
-            width: 52px;
-            height: 80px;
-            border-radius: 50px 50px 0 0;
-            background: lightgray;
-        }
-
-        .heart::before {
-            left: 50px;
-            transform: rotate(-45deg);
-            transform-origin: 0 100%;
-        }
-
-        .heart::after {
-            left: 0;
-            transform: rotate(45deg);
-            transform-origin: 100% 100%;
-        }
-
     </style>
 </head>
 <body>
@@ -155,30 +132,28 @@ $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, us
 
         const loggedIn = <?php echo $_SESSION["logged_in"] ? 'true' : 'false'; ?>;
 
-        $('.like-btn').click(function() {
-            if (!loggedIn) {
-                alert('Please log in to like the post.');
-                return;
-            }
-            // Your AJAX call to handle likes
-        });
-
         $('.comment-btn').click(function() {
             if (!loggedIn) {
                 alert('Please log in to comment on the post.');
                 return;
             }
-            // Your AJAX call to handle comments
-        $(".heart").click(e => {
+        });
+        // Your AJAX call to handle comments
+        $(".like-btn").click(e => {
+            if (!loggedIn) {
+                alert('Please log in to like the post.');
+                return;
+            }
             // access post image to identify post
-            let heartParent = e.target.parentNode.parentNode;
+            let heartParent = e.target.parentNode.parentNode.parentNode;
             let postImg;
 
             [ ...heartParent.children ].forEach(child => {
-                if (child.className === "image-container") {
+                if (child.className === "post-body") {
                     postImg = child.childNodes[0].src;
                 }
             })
+        
 
             // callback function to modify 'like' table
             $.ajax({
@@ -188,7 +163,7 @@ $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, us
                 success: (returnData, status) => {
                     console.log(returnData);
                 }
-            });
+            })
         });
     </script>
 </body>
