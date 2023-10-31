@@ -131,7 +131,8 @@
             $findPosts->execute();
 
             foreach($findPosts->fetchAll(PDO::FETCH_ASSOC) as $k => $v) {
-                echo "<img class='post-img' src='" . $v["image"] . "'>";
+                echo "<h2 class='post-img'><img class='post-img' src='" . $v["image"] . "'><center>";
+                echo $v["Text"].'</center></h2>';
             }
         ?>
     </div>
