@@ -11,5 +11,18 @@
     $fetchPostData = $preparePostData->fetch(PDO::FETCH_ASSOC);
     
     $postID = $fetchPostData["PostID"];
-    echo $postID;
+    
+    // check if post is already liked
+    $checkLike = $pdo->prepare("SELECT * FROM Likes WHERE PostID='$postID' AND liker='" . $_SESSION["username"] . "';");
+    $checkLike->execute();
+
+    if (!$checkLike->fetch(PDO::FETCH_ASSOC)) {
+        $addToSQL = $pdo->prepare("INSERT INTO Likes (PostID, liker) VALUES ('$postID', '" . $_SESSION["username"] . "');");
+        $addToSQL->execute();
+        echo "liked";
+    } else {
+        $removeFromSQL = $pdo->prepare("DELETE FROM Likes WHERE PostID='$postID' AND liker='" . $_SESSION["username"] . "';");
+        $removeFromSQL->execute();
+        echo "unliked";
+    }
 ?>

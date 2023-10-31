@@ -5,9 +5,9 @@ include "../includes/setupUserData.php";
 include '../includes/navbar.php';
 require_login($_SESSION["logged_in"]);
 // query is the sql statement that runs
-$query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, users.profile_image, follows.follower FROM posts JOIN users on posts.username=users.username JOIN follows ON posts.username=follows.following WHERE follower='" . $user["username"] . "' OR posts.username='" . $user["username"] . "' GROUP BY PostID ORDER BY PostID desc;";
+$query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, users.profile_image, follows.follower FROM posts LEFT JOIN users on posts.username=users.username LEFT JOIN follows ON posts.username=follows.following WHERE follower='" . $user["username"] . "' OR posts.username='" . $user["username"] . "' GROUP BY PostID ORDER BY PostID desc;";
+// SELECT PostID, first_name, Text, Date, posts.image, posts.username, users.profile_image, follows.follower FROM posts LEFT JOIN users on posts.username=users.username JOIN follows ON posts.username=follows.following WHERE follower='meatballenr' OR posts.username='meatballenr' GROUP BY PostID ORDER BY PostID desc;
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -101,7 +101,17 @@ $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, us
                             echo '<i class="heart-icon fas fa-heart"></i><i class="comment-icon fas fa-comment"></i>';
                         }
                         echo '<div class="like-comment-container">';
-                        echo '<span class="like-btn">❤️ Like</span>';
+
+                        $checkLike = $pdo->prepare("SELECT * FROM Likes WHERE PostID='$field1name' AND liker='" . $_SESSION["username"] . "';");
+                        $checkLike->execute();
+                        $numLikes = 0;
+                        // CONTINUE HERE TO ADD LIKE NUMBER
+
+                        if ($checkLike->fetch()) {
+                            echo '<span class="like-btn">❤️ Liked</span>';
+                        } else {
+                            echo '<span class="like-btn">🤍 Like</span>';
+                        }
                         echo '<span class="comment-btn">💬 Comment</span>';
                         echo '</div>'; // End of like-comment-container
                         echo '</div>'; // End of post-footer
@@ -138,6 +148,7 @@ $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, us
                 return;
             }
         });
+
         // Your AJAX call to handle comments
         $(".like-btn").click(e => {
             if (!loggedIn) {
@@ -161,7 +172,11 @@ $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, us
                 data: { postImage: postImg },
                 url: "../src/like.php",
                 success: (returnData, status) => {
-                    console.log(returnData);
+                    if (returnData === "liked") {
+                        e.target.innerText = "❤️ Liked";
+                    } else if (returnData === "unliked") {
+                        e.target.innerText = "🤍 Like";
+                    }
                 }
             })
         });
