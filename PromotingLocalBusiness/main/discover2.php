@@ -32,7 +32,7 @@
         include "../includes/setupUserData.php";
         include "../includes/navbar.php";
     ?>
-
+    <h1><center>Search for users</center></h1>
     <div class="container">
         <form action="" method="get" autocomplete="off" class="mb-3">
             <input type="text" name="search" id="search" onkeyup="searchUsers(this);" placeholder="Search" class="form-control" value="<?= $_GET["search"] ?? ""; ?>">
@@ -79,8 +79,11 @@
                 }
             });
         }
-
+        
     </script>
+    <?php
+    include "allPosts.php"
+    ?>
 </body>
 </html>
 
