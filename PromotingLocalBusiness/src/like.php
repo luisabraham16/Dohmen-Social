@@ -11,5 +11,5 @@
     $fetchPostData = $preparePostData->fetch(PDO::FETCH_ASSOC);
     
     $postID = $fetchPostData["PostID"];
-    
+    echo $postID;
 ?>
