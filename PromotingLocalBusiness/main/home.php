@@ -75,6 +75,29 @@ $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, us
             cursor: pointer;
             margin-right: 0.5rem;
         }
+
+        .heart::before, .heart::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 52px;
+            height: 80px;
+            border-radius: 50px 50px 0 0;
+            background: lightgray;
+        }
+
+        .heart::before {
+            left: 50px;
+            transform: rotate(-45deg);
+            transform-origin: 0 100%;
+        }
+
+        .heart::after {
+            left: 0;
+            transform: rotate(45deg);
+            transform-origin: 100% 100%;
+        }
+
     </style>
 </head>
 <body>
@@ -107,6 +130,7 @@ $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, us
                         echo '</div>'; // End of post-footer
                         echo '</div>'; // End of post
                     }
+                    echo '<br><div><div class="heart"></div><h4>'.$field3name.'</h4><h5>' . $field4name . '</h5></div></div>';
                     $result->free();
                 }
             ?>
@@ -145,6 +169,26 @@ $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, us
                 return;
             }
             // Your AJAX call to handle comments
+        $(".heart").click(e => {
+            // access post image to identify post
+            let heartParent = e.target.parentNode.parentNode;
+            let postImg;
+
+            [ ...heartParent.children ].forEach(child => {
+                if (child.className === "image-container") {
+                    postImg = child.childNodes[0].src;
+                }
+            })
+
+            // callback function to modify 'like' table
+            $.ajax({
+                type: "POST",
+                data: { postImage: postImg },
+                url: "../src/like.php",
+                success: (returnData, status) => {
+                    console.log(returnData);
+                }
+            });
         });
     </script>
 </body>
