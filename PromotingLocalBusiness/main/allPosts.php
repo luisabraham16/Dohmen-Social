@@ -102,7 +102,17 @@ $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, us
                             echo '<i class="heart-icon fas fa-heart"></i><i class="comment-icon fas fa-comment"></i>';
                         }
                         echo '<div class="like-comment-container">';
-                        echo '<span class="like-btn">❤️ Like</span>';
+
+                        $checkLike = $pdo->prepare("SELECT * FROM Likes WHERE PostID='$field1name' AND liker='" . $_SESSION["username"] . "';");
+                        $checkLike->execute();
+                        $numLikes = 0;
+                        // CONTINUE HERE TO ADD LIKE NUMBER
+
+                        if ($checkLike->fetch()) {
+                            echo '<span class="like-btn">❤️ Liked</span>';
+                        } else {
+                            echo '<span class="like-btn">🤍 Like</span>';
+                        }
                         echo '<span class="comment-btn">💬 Comment</span>';
                         echo '</div>'; // End of like-comment-container
                         echo '</div>'; // End of post-footer
@@ -113,7 +123,6 @@ $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, us
                 }
             ?>
         </div>
-    </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     
