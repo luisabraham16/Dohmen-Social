@@ -47,9 +47,6 @@
         $statement->execute();
     }
 ?>
-<?php
-    // ... Your PHP code remains the same
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -86,7 +83,7 @@
     <div class="container">
         <form action="" method="POST" enctype="multipart/form-data" autocomplete="off">
             <div class="mb-3">
-                <label for="userPost" class="form-label">Post</label>
+                <label for="userPost" class="form-label">Description</label>
                 <input type="text" class="form-control" id="userPost" name="userPost">
             </div>
             <div class="mb-3">
@@ -95,7 +92,7 @@
             </div>
             <!-- Image preview -->
             <img id="imgPreview" class="img-preview" src="" alt="Image preview..." style="display:none;">
-            <input type="submit" class="btnSubmit" value="Submit">
+            <input type="submit" class="btnSubmit" value="Post">
         </form>
     </div>
 
