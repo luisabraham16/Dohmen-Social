@@ -5,35 +5,79 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dohmen's Social</title>
 
-
+    <!-- Include Bootstrap CSS & JS (assumed based on your classes) -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
     <style>
-        * {
-            margin: 0px;
-            padding: 0px;
-        }
+        /* Styling for the page */
         body {
+            font-family: 'Arial', sans-serif;
             background-color: lightsteelblue;
+            height: 100vh;
+        }
+
+        .container {
             display: flex;
+            justify-content: center;
             align-items: center;
-            justify-content: center;
-            height: 70vh;
+            height: 100%;
         }
-        form {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            background-color: white;
-            width: 60%;
-            border-radius: 1vh;
-            border: 5px solid black;
+
+        .card {
+            width: 400px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
         }
-        form > * {
-            margin: 1vh 1vw;
+
+        .card-header {
+            background-color: dodgerblue;
+            color: white;
+            font-weight: bold;
         }
+
+        label {
+            font-weight: bold;
+        }
+
+        input[type="text"], input[type="password"], input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: dodgerblue;
+            color: white;
+            cursor: pointer;
+        }
+
+        input[type="submit"]:hover {
+            background-color: darkblue;
+        }
+
         .error {
             color: red;
+            font-size: 12px;
         }
+
+        a {
+            text-decoration: none;
+            color: dodgerblue;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
     </style>
+
 </head>
 <body>
     <!-- FRONT END PHP -->
@@ -124,59 +168,116 @@
             }
             
         }
+        $user = [
+            "FName" => "",
+            "LName" => "",
+            "Email" => "",
+            "Username" => "",
+            "Password" => ""
+        ];
+
+        $errors = [
+            "FName" => "",
+            "LName" => "",
+            "Email" => "",
+            "Username" => "",
+            "Password" => ""
+        ];
+
     ?>
-    <form action="" method="post" enctype="multipart/form-data">
-        <div>
-            <label for="FName">First Name: </label>
-            <input type="text" name="FName" id="" value="<?= $user["FName"] ?? ""; ?>">
-            <span class="error"><?= $errors["FName"] ?></span>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Dohmen's Social</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="login.php">Login</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="register.php">Register</a>
+                </li>
+            </ul>
         </div>
-        <div>
-            <label for="LName">Last Name: </label>
-            <input type="text" name="LName" value="<?= $user["LName"] ?? ""; ?>">
-            <span class="error"><?= $errors["LName"]; ?></span>
-        </div>
-        <div>
-            <label for="email">Email: </label>
-            <input type="text" name="email" value="<?= $user["Email"] ?? ""; ?>">
-            <span class="error"><?= $errors["Email"]; ?></span>
-        </div>
-        <div>
-            <label for="username">Username: </label>
-            <input type="text" name="username" value="<?= $user["Username"] ?? ""; ?>">
-            <span class="error"><?= $errors["Username"]; ?></span>
-        </div>
-        <div>
-            <label for="pw">Password: </label>
-            <input type="password" name="pw">
-        </div>
-        <div>
-            <label for="pw2">Confirm <br> Password: </label>
-            <input type="password" name="pw2">
-            <span id="matching" class="error"><?= $errors["Password"]; ?></span>
-        </div>
-        <div>
-            <label for="image">Profile Picture: </label>
-            <input type="file" accept="image/*" name="image" id="image">
-        </div>
+    </nav>
+
+    <!-- Background Slideshow -->
+    <div class="slideshow">
+        <img class="active" src=".../includes/Logo.png" alt="">
+        <img src=".../includes/Logo.png" alt="">
+        <img src=".../includes/Logo.png" alt="">
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Registration Form -->
+        <div class="card">
+            <div class="card-header">Register</div>
+            <div class="card-body">
+                <form action="register.php" method="post" enctype="multipart/form-data">
+                                <div>
+                                    <label for="FName">First Name: </label>
+                                    <input type="text" name="FName" value="<?= $user["FName"] ?? ""; ?>">
+                                    <span class="error"><?= $errors["FName"] ?></span>
+                                </div>
+                                <div>
+                                    <label for="LName">Last Name: </label>
+                                    <input type="text" name="LName" value="<?= $user["LName"] ?? ""; ?>">
+                                    <span class="error"><?= $errors["LName"]; ?></span>
+                                </div>
+                                <div>
+                                    <label for="email">Email: </label>
+                                    <input type="text" name="email" value="<?= $user["Email"] ?? ""; ?>">
+                                    <span class="error"><?= $errors["Email"]; ?></span>
+                                </div>
+                                <div>
+                                    <label for="username">Username: </label>
+                                    <input type="text" name="username" value="<?= $user["Username"] ?? ""; ?>">
+                                    <span class="error"><?= $errors["Username"]; ?></span>
+                                </div>
+                                <div>
+                                    <label for="pw">Password: </label>
+                                    <input type="password" name="pw">
+                                </div>
+                                <div>
+                                    <label for="pw2">Confirm <br> Password: </label>
+                                    <input type="password" name="pw2">
+                                    <span id="matching" class="error"><?= $errors["Password"]; ?></span>
+                                </div>
+                                <div>
+                                    <label for="image">Profile Picture: </label>
+                                    <input type="file" accept="image/*" name="image" id="image">
+                                </div>
 
 
-        <input type="submit" name="sub">
-        <a href="login.php">Already have a profile?</a>
-    </form>
+                                <input type="submit" name="sub">
+                                <a href="login.php">Already have a profile?</a>
+                            </form>
+                            <input type="submit" name="sub" value="Register">
+                    <p class="mt-3 text-center">Already have an account? <a href="login.php">Login here!</a></p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
-        let proof =document.querySelector("#matching");
-        let pw = document.querySelector("[name='pw']");
-        let pw2 = document.querySelector("[name='pw2']");
+        $(document).ready(function() {
+            let currentImageIndex = 0;
+            const images = $('.slideshow img');
+            const duration = 5000;  // Change slide every 5 seconds
 
-
-        pw2.addEventListener("change", e => {
-            if (pw.value !== pw2.value) {
-                proof.textContent = "Passwords are not matching";
-            } else {
-                proof.textContent = "";
-            }
+            setInterval(function() {
+                images.eq(currentImageIndex).removeClass('active');
+                currentImageIndex = (currentImageIndex + 1) % images.length;
+                images.eq(currentImageIndex).addClass('active');
+            }, duration);
         });
     </script>
 </body>
