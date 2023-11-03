@@ -75,6 +75,11 @@ $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, us
             cursor: pointer;
             margin-right: 0.5rem;
         }
+
+        .comment-box {
+            border: 3px solid black;
+            width: 200px;
+        }
     </style>
 </head>
 <body>
@@ -143,10 +148,26 @@ $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, us
 
         const loggedIn = <?php echo $_SESSION["logged_in"] ? 'true' : 'false'; ?>;
 
-        $('.comment-btn').click(function() {
+        $('.comment-btn').click(e => {
             if (!loggedIn) {
                 alert('Please log in to comment on the post.');
                 return;
+            }
+
+            let postParent = e.target.parentNode.parentNode.parentNode;
+
+            let boxExists = false;
+            [ ...postParent.children ].forEach(child => {
+                if (child.className === "comment-box") {
+                    boxExists = true;
+                }
+            });
+
+            // COMMENT BOX APPEARS/DISSAPEARS NOW, ADD COMMENTS NEXT, DISPLAY COMMENTS AFTER
+            if (!boxExists) {
+                $(postParent).append("<div class='comment-box'></div>");
+            } else {
+                $(postParent).find('.comment-box').remove();
             }
         });
 
