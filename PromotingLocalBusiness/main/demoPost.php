@@ -14,7 +14,7 @@
         'currentDate'=>""
     ];
     if($_SERVER['REQUEST_METHOD']== 'POST'){
-        $postData['userPost']=$_POST['userPost'];
+        $postData['userPost']=htmlspecialchars($_POST['userPost']);
         //$postData['userImg']=$_POST['userImg'];
         $postData['currentDate'] = date("m/d/Y"); //Do time here
         

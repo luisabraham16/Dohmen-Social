@@ -25,4 +25,10 @@
         $removeFromSQL->execute();
         echo "unliked";
     }
+
+    $fetchNumLikes = $pdo->prepare("SELECT COUNT(PostID) FROM Likes WHERE PostID='$postID'");
+    $fetchNumLikes->execute();
+    $numLikes = $fetchNumLikes->fetch()["COUNT(PostID)"];
+
+    echo "," . $numLikes;
 ?>

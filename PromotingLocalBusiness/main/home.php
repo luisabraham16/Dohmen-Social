@@ -75,6 +75,11 @@ $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, us
             cursor: pointer;
             margin-right: 0.5rem;
         }
+
+        .comment-box {
+            border: 3px solid black;
+            width: 200px;
+        }
     </style>
 </head>
 <body>
@@ -104,13 +109,14 @@ $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, us
 
                         $checkLike = $pdo->prepare("SELECT * FROM Likes WHERE PostID='$field1name' AND liker='" . $_SESSION["username"] . "';");
                         $checkLike->execute();
-                        $numLikes = 0;
-                        // CONTINUE HERE TO ADD LIKE NUMBER
+                        $fetchNumLikes = $pdo->prepare("SELECT COUNT(PostID) FROM Likes WHERE PostID='$field1name'");
+                        $fetchNumLikes->execute();
+                        $numLikes = $fetchNumLikes->fetch()["COUNT(PostID)"];
 
                         if ($checkLike->fetch()) {
-                            echo '<span class="like-btn">❤️ Liked</span>';
+                            echo '<span class="like-btn">' . $numLikes . ' ❤️ Liked</span>';
                         } else {
-                            echo '<span class="like-btn">🤍 Like</span>';
+                            echo '<span class="like-btn">' . $numLikes . ' 🤍 Like</span>';
                         }
                         echo '<span class="comment-btn">💬 Comment</span>';
                         echo '</div>'; // End of like-comment-container
@@ -142,10 +148,26 @@ $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, us
 
         const loggedIn = <?php echo $_SESSION["logged_in"] ? 'true' : 'false'; ?>;
 
-        $('.comment-btn').click(function() {
+        $('.comment-btn').click(e => {
             if (!loggedIn) {
                 alert('Please log in to comment on the post.');
                 return;
+            }
+
+            let postParent = e.target.parentNode.parentNode.parentNode;
+
+            let boxExists = false;
+            [ ...postParent.children ].forEach(child => {
+                if (child.className === "comment-box") {
+                    boxExists = true;
+                }
+            });
+
+            // COMMENT BOX APPEARS/DISSAPEARS NOW, ADD COMMENTS NEXT, DISPLAY COMMENTS AFTER
+            if (!boxExists) {
+                $(postParent).append("<div class='comment-box'></div>");
+            } else {
+                $(postParent).find('.comment-box').remove();
             }
         });
 
@@ -172,10 +194,10 @@ $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, us
                 data: { postImage: postImg },
                 url: "../src/like.php",
                 success: (returnData, status) => {
-                    if (returnData === "liked") {
-                        e.target.innerText = "❤️ Liked";
-                    } else if (returnData === "unliked") {
-                        e.target.innerText = "🤍 Like";
+                    if (returnData.split(",")[0] === "liked") {
+                        e.target.innerText = returnData.split(",")[1] + " ❤️ Liked";
+                    } else if (returnData.split(",")[0] === "unliked") {
+                        e.target.innerText = returnData.split(",")[1] + " 🤍 Like";
                     }
                 }
             })
