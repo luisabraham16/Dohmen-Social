@@ -78,7 +78,12 @@ $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, us
 
         .comment-box {
             border: 3px solid black;
-            width: 200px;
+            width: 100%;
+            padding: 1vh 1vw;
+        }
+
+        .post-comment-btn {
+            cursor: pointer;
         }
     </style>
 </head>
@@ -163,13 +168,69 @@ $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, us
                 }
             });
 
-            // COMMENT BOX APPEARS/DISSAPEARS NOW, ADD COMMENTS NEXT, DISPLAY COMMENTS AFTER
             if (!boxExists) {
-                $(postParent).append("<div class='comment-box'></div>");
+                $(postParent).append("<div class='comment-box'><div class='add-comment'><input type='text' class='user-comment'><span class='post-comment-btn' onclick='sendComment(this)'>Comment</span></div></div>");
             } else {
                 $(postParent).find('.comment-box').remove();
             }
+
+            let mainParent = e.parentNode.parentNode.parentNode;
+            let postImg;
+
+            [ ...mainParent.children ].forEach(child => {
+                if (child.className === "post-body") {
+                    postImg = child.childNodes[0].src;
+                }
+            });
+
+            $.ajax({
+                type: "POST",
+                data: { postImage: postImg },
+                url: "../src/searchComments.php",
+                success: (returnData, status) => {
+                    [ ...postParent.children ].forEach(child => {
+                        if (child.className = "comment-box") {
+                            //$(child).append(returnData);
+                            console.log(returnData);
+                            // CONTINUE HERE
+                        }
+                    });
+                }
+            });
+
         });
+
+        function sendComment(e) {
+            // access post image to identify post
+            let mainParent = e.parentNode.parentNode.parentNode;
+            let postImg;
+            let comment;
+
+            [ ...mainParent.children ].forEach(child => {
+                if (child.className === "post-body") {
+                    postImg = child.childNodes[0].src;
+                }
+            });
+
+            [ ...e.parentNode.children ].forEach(child => {
+                if (child.className === "user-comment") {
+                    comment = child.value;
+                }
+            });
+
+            $.ajax({
+                type: "POST",
+                data: { postImage: postImg, userComment: comment },
+                url: "../src/addComment.php",
+                success: (returnData, status) => {
+                    [ ...e.parentNode.children ].forEach(child => {
+                        if (child.className === "user-comment") {
+                            child.value = "";
+                        }
+                    });
+                }
+            });
+        }
 
         // Your AJAX call to handle comments
         $(".like-btn").click(e => {
