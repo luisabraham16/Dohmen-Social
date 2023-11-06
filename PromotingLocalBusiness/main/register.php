@@ -5,74 +5,167 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dohmen's Social</title>
 
-    <!-- Include Bootstrap CSS & JS (assumed based on your classes) -->
+    <!-- Include Bootstrap CSS & JS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
     <style>
-        /* Styling for the page */
+        /* Base Reset */
+        * {
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: 'Arial', sans-serif;
-            background-color: lightsteelblue;
+            background-color: black;
+            color: #fff;
+            overflow: hidden;
             height: 100vh;
         }
 
-        .container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100%;
+        body, .card {
+            margin: 0;
+            padding: 0;
         }
 
-        .card {
-            width: 400px;
+        .slideshow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .slideshow img {
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+            object-fit: cover;
+        }
+
+        .slideshow img.active {
+            opacity: 1;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            width: 100%;
+            max-width: 400px;
+            padding: 20px;
             border-radius: 10px;
             box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
         }
 
-        .card-header {
-            background-color: dodgerblue;
-            color: white;
-            font-weight: bold;
+        form > div {
+            margin: 5px 0;
+            display: flex;
+            flex-direction: column;
         }
 
         label {
+            margin-bottom: 5px;
             font-weight: bold;
         }
 
-        input[type="text"], input[type="password"], input[type="file"] {
-            width: 100%;
+        input[type="text"], input[type="password"], input[type="file"], input[type="submit"] {
             padding: 10px;
-            margin: 5px 0;
             border: 1px solid #ccc;
             border-radius: 5px;
+            transition: border-color 0.3s ease;
         }
 
-        input[type="submit"] {
-            width: 100%;
-            padding: 10px;
-            border: none;
-            border-radius: 5px;
-            background-color: dodgerblue;
-            color: white;
-            cursor: pointer;
-        }
-
-        input[type="submit"]:hover {
-            background-color: darkblue;
+        input[type="text"]:focus, input[type="password"]:focus {
+            border-color: black;
         }
 
         .error {
             color: red;
-            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        input[type="submit"] {
+            cursor: pointer;
+            background-color: gray;
+            color: white;
+            margin-top: 15px;
+        }
+
+        input[type="submit"]:hover {
+            background-color: gray;
         }
 
         a {
+            margin-top: 10px;
+            text-align: center;
             text-decoration: none;
-            color: dodgerblue;
+            color: gray;
+            transition: color 0.3s ease;
         }
 
         a:hover {
+            color: black;
+        }
+
+        .container {
+            display: flex;
+            justify-content: left;
+            align-items: left;
+            height: 120vh;
+            backdrop-filter: blur(5px); /* blur effect */
+        }
+
+        .card {
+            background-color: rgba(255, 255, 255, 0.6); /* semi transparent background */
+            width: auto;
+        }
+
+        /* Enhancing the form and its elements */
+        .card-header {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.8); /* darker background for header */
+            color: white; /* text color */
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        form label {
+            font-weight: 600;
+        }
+
+        form input[type="submit"] {
+            background-color: green;
+            border: none;
+            color: white;
+            padding: 12px 20px;
+            text-transform: uppercase;
+            font-weight: 600;
+            border-radius: 3px;
+            transition: background-color 0.3s ease;
+        }
+
+        form input[type="submit"]:hover {
+            background-color: gray;
+        }
+
+        .mt-3.text-center a {
+            color: #007BFF;
+        }
+
+        .mt-3.text-center a:hover {
             text-decoration: underline;
         }
 
@@ -80,8 +173,10 @@
 
 </head>
 <body>
-    <!-- FRONT END PHP -->
     <?php
+        require "../includes/connection.php";
+        require "../includes/validations.php";
+
         $user = [
             "FName" => "",
             "LName" => "",
@@ -89,7 +184,7 @@
             "Username" => "",
             "Password" => ""
         ];
-       
+
         $errors = [
             "FName" => "",
             "LName" => "",
@@ -97,23 +192,15 @@
             "Username" => "",
             "Password" => ""
         ];
-    ?>
 
-
-    <!-- BACK END PHP -->
-    <?php
-        //$x = $pdo->prepare("INSERT INTO dohmen_s_social_profile_data___sheet1 (UserID, Password, FName, LName, Bio, Followers, Following) VALUES ('tylercoder1', 'iamtyler', 'Tyler', 'Ozburn', 'I am making a discord bot', 100, 100)");
-
-        if ($_SERVER["REQUEST_METHOD"] === "POST")
-        {
-            include "../includes/connection.php";
-            include "../includes/validations.php";
-
-            $user["FName"] = $_POST["FName"] ?? "";
-            $user["LName"] = $_POST["LName"] ?? "";
-            $user["Email"] = $_POST["email"] ?? "";
-            $user["Username"] = $_POST["username"] ?? "";
-            $user["Password"] = $_POST["pw"] ?? "";
+        if ($_SERVER["REQUEST_METHOD"] === "POST") {
+            // Get filtered input
+            $user["FName"] = filter_input(INPUT_POST, "FName", FILTER_SANITIZE_STRING);
+            $user["LName"] = filter_input(INPUT_POST, "LName", FILTER_SANITIZE_STRING);
+            $user["Email"] = filter_input(INPUT_POST, "email", FILTER_VALIDATE_EMAIL);
+            $user["Username"] = filter_input(INPUT_POST, "username", FILTER_SANITIZE_STRING);
+            $user["Password"] = filter_input(INPUT_POST, "pw", FILTER_SANITIZE_STRING);
+            $password2 = filter_input(INPUT_POST, "pw2", FILTER_SANITIZE_STRING);
 
             // validate data
             $errors["FName"] = validateText($user["FName"], "FName") ? "" : "Invalid text.";
@@ -121,69 +208,44 @@
             $errors["Email"] = isEmail($user["Email"]) ? "" : "Invalid Email.";
             $errors["Username"] = validateText($user["Username"], "username") ? "" : "Invalid Username.";
             $errors["Password"] = isPassword($user["Password"]) ? "" : "Invalid Password.<br>Make sure it contains both uppercase and lowercase letters and a number.";
-            $errors["Password"] = ($_POST["pw"] == $_POST["pw2"]) ? "" : "Passwords do not match.";
+            if ($user["Password"] !== $password2) {
+                $errors["Password"] = "Passwords do not match.";
+            }
 
-
-            $userTakenPrep = $pdo->prepare("SELECT username FROM Users WHERE username = '" . $user["Username"] . "';");
-            $userTakenPrep->execute();
-
-            $userTaken = $userTakenPrep->fetch();
-
+            // Check if username is already taken
+            $stmt = $pdo->prepare("SELECT username FROM Users WHERE username = :username");
+            $stmt->execute([':username' => $user["Username"]]);
+            $userTaken = $stmt->fetch();
             if ($userTaken) {
                 $errors["Username"] = "Username is already taken.";
             }
 
-            $verified = true;
-            
-            foreach($errors as $k => $v) {
-                if ($v != "") {
-                    $verified = false;
-                }
-            }
-
-            if ($verified) {
-                sanitizeData($user);
+            // Check if there are any errors before inserting into DB
+            if (!array_filter($errors)) {
+                // File upload
                 $moved = false;
-
-                if ($_FILES["image"]["error"] == 0) {
+                $newfilename = null;
+                if ($_FILES["image"]["error"] == UPLOAD_ERR_OK) {
                     $temp = $_FILES["image"]["tmp_name"];
-                    $path = "../uploads/" . $_FILES["image"]["name"];
-                    $temp2 = explode(".", $_FILES["image"]["name"]);
-                    $newfilename = "../uploads/" . generateRandomString() . round(microtime(true)) . '.' . end($temp2);
-
+                    $fileExtension = pathinfo($_FILES["image"]["name"], PATHINFO_EXTENSION);
+                    $newfilename = "../uploads/" . bin2hex(random_bytes(15)) . "." . $fileExtension;
                     $moved = move_uploaded_file($temp, $newfilename);
                 }
 
-                $x = $pdo->prepare("INSERT INTO Users (username, first_name, last_name, email, password, profile_image) VALUES ('" . $user["Username"] . "', '" . $user["FName"] . "', '" . $user["LName"] . "', '" . $user["Email"] . "', '" . password_hash($user["Password"], PASSWORD_DEFAULT) . "', '$newfilename')");
-                $x->execute();
-
-                $user["FName"] = "";
-                $user["LName"] = "";
-                $user["Email"] = "";
-                $user["Username"] = "";
-                $user["Password"] = "";
+                $stmt = $pdo->prepare("INSERT INTO Users (username, first_name, last_name, email, password, profile_image) VALUES (:username, :fname, :lname, :email, :hashed_password, :image_path)");
+                $stmt->execute([
+                    ':username' => $user["Username"],
+                    ':fname' => $user["FName"],
+                    ':lname' => $user["LName"],
+                    ':email' => $user["Email"],
+                    ':hashed_password' => password_hash($user["Password"], PASSWORD_DEFAULT),
+                    ':image_path' => $newfilename
+                ]);
 
                 header("Location: login.php");
-                die;
+                exit;
             }
-            
         }
-        $user = [
-            "FName" => "",
-            "LName" => "",
-            "Email" => "",
-            "Username" => "",
-            "Password" => ""
-        ];
-
-        $errors = [
-            "FName" => "",
-            "LName" => "",
-            "Email" => "",
-            "Username" => "",
-            "Password" => ""
-        ];
-
     ?>
 
     <!-- Navbar -->
@@ -206,59 +268,77 @@
 
     <!-- Background Slideshow -->
     <div class="slideshow">
-        <img class="active" src=".../includes/Logo.png" alt="">
-        <img src=".../includes/Logo.png" alt="">
-        <img src=".../includes/Logo.png" alt="">
+        <img class="active" src="../includes/Logo.png" alt="">
+        <img src="../includes/Logo.png" alt="">
+        <img src="../includes/Logo.png" alt="">
     </div>
 
     <!-- Main Container -->
     <div class="container">
         <!-- Registration Form -->
-        <div class="card">
+        <div class="card" style="margin: 0; padding: 0;">
             <div class="card-header">Register</div>
             <div class="card-body">
                 <form action="register.php" method="post" enctype="multipart/form-data">
-                                <div>
-                                    <label for="FName">First Name: </label>
-                                    <input type="text" name="FName" value="<?= $user["FName"] ?? ""; ?>">
-                                    <span class="error"><?= $errors["FName"] ?></span>
-                                </div>
-                                <div>
-                                    <label for="LName">Last Name: </label>
-                                    <input type="text" name="LName" value="<?= $user["LName"] ?? ""; ?>">
-                                    <span class="error"><?= $errors["LName"]; ?></span>
-                                </div>
-                                <div>
-                                    <label for="email">Email: </label>
-                                    <input type="text" name="email" value="<?= $user["Email"] ?? ""; ?>">
-                                    <span class="error"><?= $errors["Email"]; ?></span>
-                                </div>
-                                <div>
-                                    <label for="username">Username: </label>
-                                    <input type="text" name="username" value="<?= $user["Username"] ?? ""; ?>">
-                                    <span class="error"><?= $errors["Username"]; ?></span>
-                                </div>
-                                <div>
-                                    <label for="pw">Password: </label>
-                                    <input type="password" name="pw">
-                                </div>
-                                <div>
-                                    <label for="pw2">Confirm <br> Password: </label>
-                                    <input type="password" name="pw2">
-                                    <span id="matching" class="error"><?= $errors["Password"]; ?></span>
-                                </div>
-                                <div>
-                                    <label for="image">Profile Picture: </label>
-                                    <input type="file" accept="image/*" name="image" id="image">
+                                <!-- First Name -->
+                                <div class="input-group">
+                                    <label for="FName">First Name</label>
+                                    <input type="text" name="FName" id="FName" placeholder="Enter your first name" required value="<?= htmlspecialchars($user['FName']) ?>">
+                                    <small class="error-text"><?= $errors["FName"] ?? "" ?></small>
                                 </div>
 
+                                <!-- Last Name -->
+                                <div class="input-group">
+                                    <label for="LName">Last Name</label>
+                                    <input type="text" name="LName" id="LName" placeholder="Enter your last name" required value="<?= htmlspecialchars($user['LName']) ?>">
+                                    <small class="error-text"><?= $errors["LName"] ?? "" ?></small>
+                                </div>
 
-                                <input type="submit" name="sub">
-                                <a href="login.php">Already have a profile?</a>
+                                <!-- Email -->
+                                <div class="input-group">
+                                    <label for="email">Email</label>
+                                    <input type="text" name="email" id="email" placeholder="Enter your email" required value="<?= htmlspecialchars($user['Email']) ?>">
+                                    <small class="error-text"><?= $errors["Email"] ?? "" ?></small>
+                                </div>
+
+                                <!-- Username -->
+                                <div class="input-group">
+                                    <label for="username">Username</label>
+                                    <input type="text" name="username" id="username" placeholder="Enter a username" required value="<?= htmlspecialchars($user['Username']) ?>">
+                                    <small class="error-text"><?= $errors["Username"] ?? "" ?></small>
+                                </div>
+
+                                <!-- Password -->
+                                <div class="input-group">
+                                    <label for="pw">Password</label>
+                                    <input type="password" name="pw" id="pw" placeholder="Enter a strong password" required>
+                                    <small class="error-text"><?= $errors["Password"] ?? "" ?></small>
+                                </div>
+
+                                <!-- Confirm Password -->
+                                <div class="input-group">
+                                    <label for="pw2">Confirm Password</label>
+                                    <input type="password" name="pw2" id="pw2" placeholder="Confirm your password" required>
+                                    <!-- Not adding error feedback here since the same password error is already displayed above -->
+                                </div>
+
+                                <!-- Profile Image -->
+                                <div class="input-group">
+                                    <label for="image">Profile Image</label>
+                                    <input type="file" name="image" id="image" accept=".png, .jpg, .jpeg">
+                                    <!-- Ideally, add feedback for successful uploads or issues with the file -->
+                                </div>
+
+                                <!-- Submit Button -->
+                                <div class="input-group">
+                                    <button type="submit" class="btn">Submit</button>
+                                </div>
+
+                                
                             </form>
-                            <input type="submit" name="sub" value="Register">
                     <p class="mt-3 text-center">Already have an account? <a href="login.php">Login here!</a></p>
                 </form>
+            </div>
             </div>
         </div>
     </div>
@@ -274,10 +354,22 @@
             const duration = 5000;  // Change slide every 5 seconds
 
             setInterval(function() {
-                images.eq(currentImageIndex).removeClass('active');
+                // Hide current image
+                $(images[currentImageIndex]).removeClass('active');
                 currentImageIndex = (currentImageIndex + 1) % images.length;
-                images.eq(currentImageIndex).addClass('active');
+                // Show next image
+                $(images[currentImageIndex]).addClass('active');
             }, duration);
+        });
+        // Script to handle the blur effect for the background
+        $(document).ready(function() {
+            $('.slideshow').on('mouseenter', function() {
+                $('.container').css('backdrop-filter', 'blur(0px)');
+            });
+
+            $('.slideshow').on('mouseleave', function() {
+                $('.container').css('backdrop-filter', 'blur(5px)');
+            });
         });
     </script>
 </body>
