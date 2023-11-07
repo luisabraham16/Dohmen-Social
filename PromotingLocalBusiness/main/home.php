@@ -174,7 +174,7 @@ $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, us
                 $(postParent).find('.comment-box').remove();
             }
 
-            let mainParent = e.parentNode.parentNode.parentNode;
+            let mainParent = e.target.parentNode.parentNode.parentNode;
             let postImg;
 
             [ ...mainParent.children ].forEach(child => {
@@ -183,18 +183,13 @@ $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, us
                 }
             });
 
+            
             $.ajax({
                 type: "POST",
                 data: { postImage: postImg },
                 url: "../src/searchComments.php",
                 success: (returnData, status) => {
-                    [ ...postParent.children ].forEach(child => {
-                        if (child.className = "comment-box") {
-                            //$(child).append(returnData);
-                            console.log(returnData);
-                            // CONTINUE HERE
-                        }
-                    });
+                    $(postParent).find(".comment-box").append(returnData);
                 }
             });
 
@@ -228,6 +223,8 @@ $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, us
                             child.value = "";
                         }
                     });
+
+                    $(e.parentNode).append(returnData);
                 }
             });
         }

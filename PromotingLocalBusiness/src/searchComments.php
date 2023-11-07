@@ -12,10 +12,10 @@
     
     $postID = $fetchPostData["PostID"];
 
-    $searchComments = $pdo->prepare("SELECT * FROM Comments WHERE PostID='$postID'");
+    $searchComments = $pdo->prepare("SELECT * FROM Comments WHERE PostID='$postID' ORDER BY CommentID desc");
     $searchComments->execute();
 
     foreach ($searchComments->fetchAll() as $k => $v) {
-        echo "<div>" . $v["User"] . " " . $v["Comment"] . " " . $v["Date"] . "</div>";
+        echo "<div>" . $v["User"] . " - " . $v["Comment"] . " - " . $v["Date"] . "</div>";
     }
 ?>

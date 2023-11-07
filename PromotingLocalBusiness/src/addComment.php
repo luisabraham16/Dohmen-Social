@@ -16,4 +16,6 @@
 
     $addToSQL = $pdo->prepare("INSERT INTO Comments (PostID, User, Comment, Date) VALUES ('$postID', '" . $_SESSION["username"] . "', '$userComment', '$commentDate');");
     $addToSQL->execute();
+
+    echo "<div>" . $_SESSION["username"] . " - " . $userComment . " - " . $commentDate . "</div>";
 ?>
