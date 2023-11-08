@@ -17,5 +17,9 @@
     $addToSQL = $pdo->prepare("INSERT INTO Comments (PostID, User, Comment, Date) VALUES ('$postID', '" . $_SESSION["username"] . "', '$userComment', '$commentDate');");
     $addToSQL->execute();
 
-    echo "<div>" . $_SESSION["username"] . " - " . $userComment . " - " . $commentDate . "</div>";
+    $getUserPfp = $pdo->prepare("SELECT profile_image FROM Users WHERE username='" . $_SESSION["username"] . "'");
+    $getUserPfp->execute();
+    $userPfp = $getUserPfp->fetch(PDO::FETCH_ASSOC);
+
+    echo "<div><div class='comment-user'><img class='comment-pfp' src='" . $userPfp["profile_image"] . "' alt=''>" . $_SESSION["username"] . " - " . $userComment . " - " . $commentDate . "</div>";
 ?>

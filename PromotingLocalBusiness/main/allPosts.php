@@ -80,7 +80,7 @@ $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, us
 </head>
 <body>
     <div class="container mt-5" id="posts">
-        <h3 class="mb-4 text-center">Latest posts</h3>
+        <h3 class="mb-4 text-center">Discover the latest posts</h3>
             <?php
                 if ($result = $mysqli->query($query)) {
                     while ($row = $result->fetch_assoc()) {

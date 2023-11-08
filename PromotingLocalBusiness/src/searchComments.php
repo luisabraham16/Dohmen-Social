@@ -12,10 +12,10 @@
     
     $postID = $fetchPostData["PostID"];
 
-    $searchComments = $pdo->prepare("SELECT * FROM Comments WHERE PostID='$postID' ORDER BY CommentID desc");
+    $searchComments = $pdo->prepare("SELECT User, Comment, Date, users.profile_image FROM Comments LEFT JOIN Users ON comments.user=users.username WHERE PostID='$postID' ORDER BY CommentID desc");
     $searchComments->execute();
 
     foreach ($searchComments->fetchAll() as $k => $v) {
-        echo "<div>" . $v["User"] . " - " . $v["Comment"] . " - " . $v["Date"] . "</div>";
+        echo "<div><div class='comment-user'><img class='comment-pfp' src='" . $v["profile_image"] . "' alt=''>" . $v["User"] . "</div> - " . $v["Comment"] . " - " . $v["Date"] . "</div>";
     }
 ?>

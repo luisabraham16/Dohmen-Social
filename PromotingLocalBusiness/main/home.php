@@ -79,11 +79,24 @@ $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, us
         .comment-box {
             border: 3px solid black;
             width: 100%;
+            height: 25vh;
             padding: 1vh 1vw;
+            overflow-y: auto;
+        }
+
+        .comment-box > div > div {
+            display: flex;
+            align-items: center;
         }
 
         .post-comment-btn {
             cursor: pointer;
+        }
+
+        .comment-pfp {
+            width: 2vw;
+            border-radius: 20vw;
+            border: 2px solid black;
         }
     </style>
 </head>
@@ -169,7 +182,7 @@ $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, us
             });
 
             if (!boxExists) {
-                $(postParent).append("<div class='comment-box'><div class='add-comment'><input type='text' class='user-comment'><span class='post-comment-btn' onclick='sendComment(this)'>Comment</span></div></div>");
+                $(postParent).append("<div class='comment-box'><div class='add-comment'><input type='text' class='user-comment'><span class='post-comment-btn' onclick='sendComment(this)'>Comment</span></div><div class='comment-list'></div></div>");
             } else {
                 $(postParent).find('.comment-box').remove();
             }
@@ -189,7 +202,7 @@ $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, us
                 data: { postImage: postImg },
                 url: "../src/searchComments.php",
                 success: (returnData, status) => {
-                    $(postParent).find(".comment-box").append(returnData);
+                    $(postParent).find(".comment-list").append(returnData);
                 }
             });
 
@@ -224,7 +237,7 @@ $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, us
                         }
                     });
 
-                    $(e.parentNode).append(returnData);
+                    $(e.parentNode.parentNode).find(".comment-list").prepend(returnData);
                 }
             });
         }
