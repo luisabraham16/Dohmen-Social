@@ -24,6 +24,11 @@
         .searched-data:hover {
             background-color: lightgray;
         }
+        #ajaxdata {
+            height: 35vh;
+            width: 100%;
+            overflow-y: auto;
+        }
     </style>
 </head>
 <body>
@@ -82,7 +87,7 @@
         
     </script>
     <?php
-    include "allPosts.php"
+    include "../src/allPosts.php"
     ?>
 </body>
 </html>

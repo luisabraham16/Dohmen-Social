@@ -168,8 +168,12 @@
         .mt-3.text-center a:hover {
             text-decoration: underline;
         }
-
+        
     </style>
+
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 </head>
 <body>
@@ -232,6 +236,10 @@
                     $moved = move_uploaded_file($temp, $newfilename);
                 }
 
+                if (!$newfilename) {
+                    $newfilename = "../uploads/default pfp.png";
+                }
+
                 $stmt = $pdo->prepare("INSERT INTO Users (username, first_name, last_name, email, password, profile_image) VALUES (:username, :fname, :lname, :email, :hashed_password, :image_path)");
                 $stmt->execute([
                     ':username' => $user["Username"],
@@ -242,8 +250,15 @@
                     ':image_path' => $newfilename
                 ]);
 
-                header("Location: login.php");
-                exit;
+                echo '
+                    <script>
+                        let myForm = `<form action="login.php" method="post" name="tempForm"><input type="text" name="username" value="' . $user["Username"] . '" ><input type="text" name="pw" value="" ></form>`;
+                        $("body").append(myForm);
+            
+            
+                        document.forms["tempForm"].submit();  
+                    </script>
+                ';
             }
         }
     ?>
@@ -279,7 +294,7 @@
         <div class="card" style="margin: 0; padding: 0;">
             <div class="card-header">Register</div>
             <div class="card-body">
-                <form action="register.php" method="post" enctype="multipart/form-data">
+                <form action="" method="post" enctype="multipart/form-data">
                                 <!-- First Name -->
                                 <div class="input-group">
                                     <label for="FName">First Name</label>
@@ -342,10 +357,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Bootstrap JS and jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
         $(document).ready(function() {

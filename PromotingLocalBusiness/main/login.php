@@ -1,5 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
+<?php 
+    include "../includes/sessions.php";
+    include "../includes/connection.php";
+?>
 
 <head>
     <meta charset="UTF-8">
@@ -48,7 +52,15 @@
             z-index: 0;
             pointer-events: none;
         }
+
+        .error {
+            color: red;
+        }
     </style>
+
+    <!-- Bootstrap JS and jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 
 <body>
@@ -73,9 +85,9 @@
 
     <!-- Background Slideshow -->
     <div class="slideshow">
-        <img class="active" src=".../includes/Logo.png" alt="">
-        <img src=".../includes/Logo.png" alt="">
-        <img src=".../includes/Logo.png" alt="">
+        <img class="active" src="../includes/Logo.png" alt="">
+        <img src="../includes/Logo.png" alt="">
+        <img src="../includes/dohmen workin.PNG" alt="">
     </div>
 
     <!-- Main Container -->
@@ -113,32 +125,30 @@
                 "username" => htmlspecialchars($_POST["username"]),
                 "password" => htmlspecialchars($_POST["pw"])
             ];
-
-            include "../includes/sessions.php";
-            include "../includes/connection.php";
         
             // Updated to use prepared statements properly
-            $getUser = $pdo->prepare("SELECT Password FROM Users WHERE Username= :username");
-            $getUser->bindParam(":username", $user["username"]);
+            $getUser = $pdo->prepare("SELECT Password FROM Users WHERE Username='". $user["username"] . "'");
             $getUser->execute();
             $x = $getUser->fetch();
-            
-            if (password_verify($user["password"], $x["Password"]) && $x["username"] == $user["username"]) {
-                    $temp1 = $user["username"];
-                    // Updated this too
-                    $temp2 = $pdo->prepare("SELECT first_name, last_name, username FROM Users WHERE UserID= :userID");
-                    $temp2->bindParam(":userID", $temp1);
-                    $temp2->execute();
-
-                    $userFound = true;
-                    login();
+            if ($x) {
+                if (password_verify($user["password"], $x["Password"])) {
+                        $temp1 = $user["username"];
+                        // Updated this too
+                        $temp2 = $pdo->prepare("SELECT first_name, last_name, username FROM Users WHERE UserID= :userID");
+                        $temp2->bindParam(":userID", $temp1);
+                        $temp2->execute();
+    
+                        $userFound = true;
+                        login();
+                } else {
+                    echo "<script>$('.card-body').prepend(`<p class='error'>Incorrect password.</p>`)</script>";
+                }
+            } else {
+                echo "<script>$('.card-body').prepend(`<p class='error'>Username not found.</p>`)</script>";
             }
-        
         }
     ?>
-    <!-- Bootstrap JS and jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
 
     <script>
         $(document).ready(function() {

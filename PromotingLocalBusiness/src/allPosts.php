@@ -5,7 +5,7 @@
 // include '../includes/navbar.php';
 require_login($_SESSION["logged_in"]);
 // query is the sql statement that runs
-$query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, users.profile_image, follows.follower FROM posts LEFT JOIN users on posts.username=users.username LEFT JOIN follows ON posts.username=follows.following GROUP BY PostID ORDER BY PostID desc;";
+$query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, users.profile_image, follows.follower FROM posts LEFT JOIN users on posts.username=users.username LEFT JOIN follows ON posts.username=follows.following GROUP BY PostID ORDER BY PostID desc LIMIT 5;";
 ?>
 
 <!DOCTYPE html>

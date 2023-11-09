@@ -102,7 +102,7 @@ $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, us
 </head>
 <body>
     <div class="container mt-5" id="posts">
-        <h3 class="mb-4 text-center">Latest posts</h3>
+        <h3 class="mb-4 text-center">Latest followed posts</h3>
             <?php
                 if ($result = $mysqli->query($query)) {
                     while ($row = $result->fetch_assoc()) {
@@ -141,10 +141,13 @@ $query = "SELECT PostID, first_name, Text, Date, posts.image, posts.username, us
                         echo '</div>'; // End of post-footer
                         echo '</div>'; // End of post
                     }
-                    echo '<br><div><div class="heart"></div><h4>'.$field3name.'</h4><h5>' . $field4name . '</h5></div></div>';
+                    if (isset($field3name) && isset($field4name)) {
+                        echo '<br><div><div class="heart"></div><h4>'.$field3name.'</h4><h5>' . $field4name . '</h5></div></div>';
+                    }
                     $result->free();
                 }
             ?>
+            <h3>Follow more people for a longer "followed posts" feed!</h3>
         </div>
     </div>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

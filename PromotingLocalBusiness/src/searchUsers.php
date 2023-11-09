@@ -3,7 +3,7 @@
     include "../includes/connection.php";
     include "../includes/setupUserData.php";
 
-    $userSearch = $_POST["search"] ?? "";
+    $userSearch = htmlspecialchars($_POST["search"]) ?? "";
     $seachedValues = $pdo->prepare("SELECT username, profile_image FROM Users WHERE username LIKE '%$userSearch%'");
     $seachedValues->execute();
 
