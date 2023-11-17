@@ -116,8 +116,8 @@
 
         .container {
             display: flex;
-            justify-content: left;
-            align-items: left;
+            justify-content: center;
+            align-items: center;
             height: 120vh;
             backdrop-filter: blur(5px); /* blur effect */
         }
@@ -139,7 +139,7 @@
         form {
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            gap: 4px;
         }
 
         form label {
@@ -147,9 +147,9 @@
         }
 
         form input[type="submit"] {
-            background-color: green;
+            background-color: #333;
             border: none;
-            color: white;
+            color: #333;
             padding: 12px 20px;
             text-transform: uppercase;
             font-weight: 600;
@@ -158,7 +158,7 @@
         }
 
         form input[type="submit"]:hover {
-            background-color: gray;
+            background-color: #333;
         }
 
         .mt-3.text-center a {
@@ -264,7 +264,7 @@
     ?>
 
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="#">Dohmen's Social</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
