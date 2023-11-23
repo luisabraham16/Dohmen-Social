@@ -65,12 +65,22 @@
         
         $userData["following"] = $fetchFollowingData["COUNT(follower)"];
         $userData["followers"] = $fetchFollowerData["COUNT(following)"];
+
+        $checkFollowed = $pdo->prepare("SELECT follower FROM Follows WHERE following='" . $userData["username"] . "' AND follower='" . $_SESSION["username"] . "'");
+        $checkFollowed->execute();
+        $followed = false;
+
+        if ($checkFollowed->rowCount() > 0) {
+            $followed = true;
+        }
+
     ?>
     <div id="user-info">
         <img src="<?= $userData["profile_image"] ?>" alt="" id="profile-image">
         <div>
             <h2><?= $userData["username"] ?></h2>
             <h4><?= $userData["first_name"] . " " . $userData["last_name"] ?></h4>
+            <button type="button" id="followBtn" onclick="followUser(this)"><?= $followed ? "Unfollow" : "Follow" ?></button>
         </div>
         <div>
             <h3>Followers: <?= $userData["followers"]; ?></h3>
@@ -91,4 +101,20 @@
         ?>
     </div>
 </body>
+<script src="../includes/jquery-3.7.1.min.js"></script>
+<script>
+    const followUser = e => {
+        $.ajax({
+            type: "POST",
+            url: "../src/follow.php",
+            data: { name: "<?= $_SESSION["username"] ?>", name2: "<?= $userData["username"] ?>" }
+        });
+
+        if (document.querySelector("#followBtn").textContent === "Follow") {
+            document.querySelector("#followBtn").textContent = "Unfollow";
+        } else {
+            document.querySelector("#followBtn").textContent = "Follow";
+        }
+    }
+</script>
 </html>

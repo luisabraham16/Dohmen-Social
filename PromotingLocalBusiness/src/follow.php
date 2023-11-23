@@ -19,6 +19,3 @@
     }
 
 ?>
-<script>
-    console.log("HIII");
-</script>
